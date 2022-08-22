@@ -172,15 +172,16 @@ function writeTrainingData(nInputs::Int32, nOutputs::Int32, nTrainingExamples::I
             randInputVector[j] = r[j]*inRanges[j][2] + inRanges[j][1]
         end
         outputs::Array = inWeights*randInputVector
-        print(file, randInputVector)
+        print(file, "$i. ", randInputVector, "\n")
         if outRandType == 'n'
             r = randn(nOutputs)
         else
             r = rand(Float32, nOutputs)
         outputs = outputs + (outVariance .* r .- outVariance/2)
-        println(file, outputs)
+        println(file, "   ", outputs, "\n ")
         end
     end
+    close(file)
 end
 
 generateTrainingData()
