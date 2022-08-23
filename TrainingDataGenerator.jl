@@ -121,6 +121,15 @@ function generateTrainingData()
         print("Output file name (don't include file type extension): ")
         fileName = readline()
 
+        print("Should the output be formatted? (yes: y, no: n) ")
+        format = readline()
+            while (format[1] != 'n' && format[1] != 'y')
+                print("\tAnswer only \"n\" or \"y\" please: ")
+                format = readline()
+                if format == "y"
+            end
+        end
+
         print("Save settings as config file? (yes: y, no: n) ")
         if (readline()[1] == 'y')
             config = open("trainingDataConfig.txt", "w")
@@ -160,10 +169,10 @@ $range: range for input $i")
             close(config)
         end
     end
-    writeTrainingData(nInputs, nOutputs, nTrainingExamples, inWeights, inRanges, outVariance, outRandType, fileName)
+    writeTrainingData(nInputs, nOutputs, nTrainingExamples, format, inWeights, inRanges, outVariance, outRandType, fileName)
 end
 
-function writeTrainingData(nInputs::Int32, nOutputs::Int32, nTrainingExamples::Int32, inWeights::Array, inRanges::Array, outVariance::Array, outRandType::Array, fileName::String)
+function writeTrainingData(nInputs::Int32, nOutputs::Int32, nTrainingExamples::Int32, format::String, inWeights::Array, inRanges::Array, outVariance::Array, outRandType::Array, fileName::String)
     file = open("$fileName.txt", "w")
     for i in 1:nTrainingExamples
         r = rand(Float32, nInputs)
@@ -172,13 +181,24 @@ function writeTrainingData(nInputs::Int32, nOutputs::Int32, nTrainingExamples::I
             randInputVector[j] = r[j]*inRanges[j][2] + inRanges[j][1]
         end
         outputs::Array = inWeights*randInputVector
-        print(file, "$i. ", randInputVector, "\n")
-        if outRandType == 'n'
-            r = randn(nOutputs)
+        if format == "y"
+            print(file, "$i. ", randInputVector, "\n")
+            if outRandType == 'n'
+                r = randn(nOutputs)
+            else
+                r = rand(Float32, nOutputs)
+            outputs = outputs + (outVariance .* r .- outVariance/2)
+            println(file, "   ", outputs, "\n ")
+            end
         else
-            r = rand(Float32, nOutputs)
-        outputs = outputs + (outVariance .* r .- outVariance/2)
-        println(file, "   ", outputs, "\n ")
+            print(file, randInputVector)
+            if outRandType == 'n'
+                r = randn(nOutputs)
+            else
+                r = rand(Float32, nOutputs)
+            outputs = outputs + (outVariance .* r .- outVariance/2)
+            println(file, outputs)
+            end
         end
     end
     close(file)
