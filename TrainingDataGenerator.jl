@@ -36,6 +36,7 @@ function generateTrainingData()
                 setindex!(outVariance, tryparse(Float32, lines[i][1:(indexOf(':', lines[i])-1)]), index)
                 setindex!(outRandType, lines[i+1][1], index)
             end
+
             fileName = lines[8+(2+nOutputs)*nInputs + 2*nOutputs][1:(indexOf(':', lines[8+(2+nOutputs)*nInputs + 2*nOutputs])-1)]
             format = string(lines[14][end])
         else
