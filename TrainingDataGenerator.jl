@@ -37,6 +37,7 @@ function generateTrainingData()
                 setindex!(outRandType, lines[i+1][1], index)
             end
             fileName = lines[8+(2+nOutputs)*nInputs + 2*nOutputs][1:(indexOf(':', lines[8+(2+nOutputs)*nInputs + 2*nOutputs])-1)]
+            format = string(lines[14][end])
         else
             println("ERROR: could not find file \"trainingDataConfig.txt\"")
         end
@@ -123,10 +124,10 @@ function generateTrainingData()
 
         print("Should the output be formatted? (yes: y, no: n) ")
         format = readline()
-            while (format[1] != 'n' && format[1] != 'y')
+        while (format[1] != 'n' && format[1] != 'y')
                 print("\tAnswer only \"n\" or \"y\" please: ")
                 format = readline()
-                if format == "y"
+            if format == "y"
             end
         end
 
@@ -166,6 +167,7 @@ $range: range for input $i")
             print(config, "\n")
 
             println(config, "$fileName: output file name")
+            println(config, "format activated: $format")
             close(config)
         end
     end
